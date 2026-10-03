@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header/Header";
+import SplashScreenPress from "@/components/SplashScreenPress";
 
 import type { Metadata, Viewport } from "next";
 import { Noto_Serif_Bengali } from "next/font/google";
@@ -137,6 +138,8 @@ export default function RootLayout({
       className={`${notoSerifBengali.className} h-full antialiased`}
     >
       <body className="min-h-full bg-[#fafafa] text-[##171717]">
+        <SplashScreenPress />
+
         <Header />
 
         <main className="max-w-7xl mx-auto">{children}</main>

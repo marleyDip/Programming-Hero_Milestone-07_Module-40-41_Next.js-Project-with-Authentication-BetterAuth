@@ -1,4 +1,23 @@
-import type { Navbar } from "@/lib/types";
+import { categoryHref, getScrapableCategories } from "@/lib/api";
+import NavLinkList, { type NavItem } from "./NavLinkList";
+
+const NavLinks = async () => {
+  const categories = await getScrapableCategories();
+
+  const items: NavItem[] = [
+    { href: "/", label: "হোম" },
+    ...categories.map((category) => ({
+      href: categoryHref(category.slug),
+      label: category.title,
+    })),
+  ];
+
+  return <NavLinkList items={items} />;
+};
+
+export default NavLinks;
+
+/* import type { Navbar } from "@/lib/types";
 import NavLinkList, { type NavItem } from "./NavLinkList";
 
 const getCategories = async (): Promise<Navbar[]> => {
@@ -36,7 +55,7 @@ const NavLinks = async () => {
   return <NavLinkList items={items} />;
 };
 
-export default NavLinks;
+export default NavLinks; */
 
 /* import { Navbar } from "@/lib/types";
 import Link from "next/link";
