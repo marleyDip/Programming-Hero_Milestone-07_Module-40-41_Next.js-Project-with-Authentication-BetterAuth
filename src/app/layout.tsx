@@ -1,15 +1,160 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header/Header";
+
+import type { Metadata, Viewport } from "next";
+import { Noto_Serif_Bengali } from "next/font/google";
+
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const notoSerifBengali = Noto_Serif_Bengali({
+  subsets: ["bengali", "latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const SITE_URL = "https://www.banglanews24.com";
+const SITE_NAME = "Bangla News 24";
+
+const DESCRIPTION =
+  "বাংলা সংবাদ, এক জায়গায়। বাংলাদেশের আজকের ব্রেকিং নিউজ, রাজনীতি, অর্থনীতি, খেলা, বিনোদন ও আন্তর্জাতিক খবর সবার আগে পড়ুন।";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+
+  title: {
+    default: `${SITE_NAME} | বাংলা সংবাদ, এক জায়গায়`,
+    template: `%s | ${SITE_NAME}`,
+  },
+
+  description: DESCRIPTION,
+
+  applicationName: SITE_NAME,
+
+  authors: [
+    {
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  ],
+
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+
+  category: "news",
+
+  keywords: [
+    "বাংলা সংবাদ",
+    "বাংলাদেশের খবর",
+    "আজকের খবর",
+    "ব্রেকিং নিউজ",
+    "সর্বশেষ খবর",
+    "রাজনীতি",
+    "অর্থনীতি",
+    "খেলাধুলা",
+    "বিনোদন",
+    "আন্তর্জাতিক",
+    "Bangla news",
+    "Bangladesh news",
+    "latest news Bangladesh",
+    "Bangla News 24",
+  ],
+
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "bn_BD",
+    url: SITE_URL,
+
+    title: `${SITE_NAME} | বাংলা সংবাদ, এক জায়গায়`,
+    description: DESCRIPTION,
+
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: `${SITE_NAME} - বাংলা সংবাদ, এক জায়গায়`,
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title: `${SITE_NAME} | বাংলা সংবাদ, এক জায়গায়`,
+    description: DESCRIPTION,
+
+    images: ["/opengraph-image.png"],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+
+  themeColor: [
+    {
+      media: "(prefers-color-scheme: light)",
+      color: "#ffffff",
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: "#0a0a0a",
+    },
+  ],
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html
+      lang="bn"
+      className={`${notoSerifBengali.className} h-full antialiased`}
+    >
+      <body className="min-h-full bg-[#fafafa] text-[##171717]">
+        <Header />
+
+        <main className="max-w-7xl mx-auto">{children}</main>
+
+        <Footer />
+      </body>
+    </html>
+  );
+}
+
+/* import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import type { Metadata } from "next";
+import { Noto_Serif_Bengali } from "next/font/google";
+import "./globals.css";
+
+const notoSerifBengali = Noto_Serif_Bengali({
+  subsets: ["latin", "bengali"],
 });
 
 export const metadata: Metadata = {
@@ -21,13 +166,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${notoSerifBengali.className} h-full antialiased`}
     >
-      <div>Nav</div>
+      <Header />
 
       <body className="">{children}</body>
 
-      <div>Footer</div>
+      <Footer />
     </html>
   );
 }
+ */
