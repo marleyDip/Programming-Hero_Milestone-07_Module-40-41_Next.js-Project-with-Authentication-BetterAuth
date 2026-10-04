@@ -55,7 +55,11 @@ const SplashScreenPress = () => {
             </div>
 
             <div className="mt-3 flex items-center justify-between border-y border-neutral-900 py-1.5 text-xs/[1.33] text-neutral-600">
-              <span>ঢাকা · {<TodayDate />}</span>
+              <span className="flex items-center gap-2">
+                ঢাকা
+                <span className="mx-0 inline-block h-1 w-1 rounded-full bg-neutral-600 align-middle" />
+                <TodayDate />
+              </span>
 
               <span className="hidden sm:inline">বাংলা সংবাদ, এক জায়গায়</span>
 

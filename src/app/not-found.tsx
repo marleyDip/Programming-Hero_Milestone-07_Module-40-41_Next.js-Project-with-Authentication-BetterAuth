@@ -1,5 +1,5 @@
+import TodayDate from "@/components/Common/TodayDate";
 import { categoryHref, getScrapableCategories } from "@/lib/api";
-import { formatBanglaDate } from "@/lib/date";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -29,7 +29,7 @@ const Lens = () => (
 
 const NotFound = async () => {
   const categories = await getScrapableCategories();
-  const date = formatBanglaDate();
+  // const date = formatBanglaDate();
 
   return (
     <section
@@ -73,7 +73,10 @@ const NotFound = async () => {
             আপনি যে লিঙ্কটি খুঁজছেন তা হয়তো সরানো হয়েছে, নাম পাল্টেছে, অথবা
             কখনোই ছিল না। চলুন, আপনাকে সঠিক খবরে ফিরিয়ে নিই।
           </p>
-          <p className="mt-3 text-xs text-neutral-500">ঢাকা, {date}</p>
+
+          <p className="mt-3 text-xs text-neutral-500">
+            ঢাকা, <TodayDate />
+          </p>
         </div>
 
         {/* Actions: search & back home */}

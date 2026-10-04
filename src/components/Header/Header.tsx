@@ -34,7 +34,9 @@ const Header = () => {
             Bangla News 24
           </span>
 
-          <span className="text-xs/[1.33] text-[#737373]">{<TodayDate />}</span>
+          <TodayDate className="text-xs/[1.33] text-[#737373]" />
+
+          {/* <span className="text-xs/[1.33] text-neutral-500">{date}</span> */}
         </div>
       </div>
 
