@@ -1,9 +1,10 @@
-import { formatBanglaDate } from "@/lib/date";
+// import { formatBanglaDate } from "@/lib/date";
 import Image from "next/image";
+import TodayDate from "../Common/TodayDate";
 import NavLinks from "./NavLinks";
 
 const Header = () => {
-  const date = formatBanglaDate();
+  // const date = formatBanglaDate();
 
   return (
     <header className="relative mx-auto max-w-7xl px-4 py-4">
@@ -33,7 +34,7 @@ const Header = () => {
             Bangla News 24
           </span>
 
-          <span className="text-xs/[1.33] text-[#737373]">{date}</span>
+          <span className="text-xs/[1.33] text-[#737373]">{<TodayDate />}</span>
         </div>
       </div>
 

@@ -1,6 +1,8 @@
 // Splash design C: a front page that typesets itself, then wipes away.
 
-import { formatBanglaDate } from "@/lib/date";
+import TodayDate from "./Common/TodayDate";
+
+// import { formatBanglaDate } from "@/lib/date";
 
 const Line = ({
   width,
@@ -28,7 +30,7 @@ const COLUMNS = [
 ];
 
 const SplashScreenPress = () => {
-  const date = formatBanglaDate();
+  // const date = formatBanglaDate();
 
   // Every bar "prints" 30ms after the one before it
   let step = 0;
@@ -53,7 +55,7 @@ const SplashScreenPress = () => {
             </div>
 
             <div className="mt-3 flex items-center justify-between border-y border-neutral-900 py-1.5 text-xs/[1.33] text-neutral-600">
-              <span>ঢাকা · {date}</span>
+              <span>ঢাকা · {<TodayDate />}</span>
 
               <span className="hidden sm:inline">বাংলা সংবাদ, এক জায়গায়</span>
 
