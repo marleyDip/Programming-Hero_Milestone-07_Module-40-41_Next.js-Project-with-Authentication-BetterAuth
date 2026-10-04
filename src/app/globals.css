@@ -6,6 +6,7 @@
   --color-danger-foreground: #a20910;
 
   --color-panel: #404040;
+  --color-panel-foreground: ##171717;
 
   --color-secondary: #9fc700;
   --color-accent: #1a2312;
@@ -80,6 +81,46 @@
   @apply cursor-pointer rounded-lg border border-transparent text-panel transition-all duration-300;
   @apply hover:border-danger/20 hover:bg-danger/10 hover:text-danger hover:shadow-glass-hover hover:backdrop-blur-md;
   @apply focus-ring;
+}
+
+/* News ticker */
+.ticker-track {
+  animation: ticker var(--ticker-duration, 60s) linear infinite;
+
+  /* animation-direction: reverse; */ /* moves left to right */
+}
+
+.ticker:hover .ticker-track,
+.ticker:focus-within .ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* @keyframes ticker {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+} */
+
+/* Reduced motion: no animation; the ticker becomes a manually scrollable row */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+  .ticker {
+    overflow-x: auto;
+  }
+  .ticker-dup {
+    display: none;
+  }
 }
 
 /* 404 page animations */

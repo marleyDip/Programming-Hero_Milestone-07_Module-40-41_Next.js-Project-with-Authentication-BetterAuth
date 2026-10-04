@@ -1,4 +1,4 @@
-import type { Navbar, News } from "@/lib/types";
+import type { CategoryNews, Headline, Navbar } from "@/lib/types";
 import { cacheLife, cacheTag } from "next/cache";
 
 const API_URL = "https://news-api-v2.vercel.app/api";
@@ -31,8 +31,6 @@ export const getScrapableCategories = async (): Promise<Navbar[]> =>
 export const categoryHref = (slug: string): string =>
   slug.startsWith("/category/") ? slug : `/category/${slug}`;
 
-export type CategoryNews = { title: string; news: News[] };
-
 /** null = unknown or empty category (the page shows a 404). Throws on API failure. */
 export const getCategoryNews = async (
   categoryId: string,
@@ -58,4 +56,27 @@ export const getCategoryNews = async (
     title: data.title,
     news: data.data,
   };
+};
+
+/* Fetch news limit 10 */
+const fetchHeadlines = async (limit: number): Promise<Headline[]> => {
+  "use cache";
+
+  cacheLife("minutes");
+  cacheTag("news", "headlines");
+
+  const res = await fetch(`${API_URL}/news?limit=${limit}`);
+  if (!res.ok) throw new Error(`Headlines API failed: ${res.status}`);
+
+  const data = await res.json();
+  return data.data ?? [];
+};
+
+/* Never throws: if the API is down the ticker simply doesn't render. */
+export const getHeadlines = async (limit = 10): Promise<Headline[]> => {
+  try {
+    return await fetchHeadlines(limit);
+  } catch {
+    return [];
+  }
 };

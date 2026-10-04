@@ -14,3 +14,10 @@ export interface News {
   imageUrl: string;
   imageAlt: string;
 }
+
+export type CategoryNews = { title: string; news: News[] };
+
+export interface Headline {
+  id: string;
+  title: string;
+}
