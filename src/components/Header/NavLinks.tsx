@@ -1,5 +1,23 @@
 import { categoryHref, getScrapableCategories } from "@/lib/api";
+import Link from "next/link";
+import { Suspense } from "react";
 import NavLinkList, { type NavItem } from "./NavLinkList";
+import { NAV_CLASS } from "./nav-styles";
+
+// Same markup as NavLinkList, minus the active state (which needs the pathname)
+const NavFallback = ({ items }: { items: NavItem[] }) => (
+  <nav aria-label="প্রধান মেনু" className={NAV_CLASS}>
+    <ul className="nav-list mx-auto flex w-max items-center">
+      {items.map(({ href, label }) => (
+        <li key={href}>
+          <Link href={href} className="nav-link">
+            {label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </nav>
+);
 
 const NavLinks = async () => {
   const categories = await getScrapableCategories();
@@ -7,6 +25,7 @@ const NavLinks = async () => {
 
   const items: NavItem[] = [
     { href: "/", label: "হোম" },
+
     ...categories.map((category) => ({
       href: categoryHref(category.slug),
       label: category.title,
@@ -15,7 +34,11 @@ const NavLinks = async () => {
 
   // console.log(items);
 
-  return <NavLinkList items={items} />;
+  return (
+    <Suspense fallback={<NavFallback items={items} />}>
+      <NavLinkList items={items} />
+    </Suspense>
+  );
 };
 
 export default NavLinks;

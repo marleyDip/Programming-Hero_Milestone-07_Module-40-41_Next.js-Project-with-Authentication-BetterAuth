@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { NAV_CLASS } from "./nav-styles";
 
 export type NavItem = { href: string; label: string };
 
@@ -33,7 +34,8 @@ const NavLinkList = ({ items }: { items: NavItem[] }) => {
   return (
     <nav
       aria-label="প্রধান মেনু"
-      className="mt-5 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden max-md:mask-[linear-gradient(to_right,transparent,black_10px,black_calc(100%-10px),transparent)]"
+      // className="mt-5 overflow-x-auto scrollbar-none [&::-webkit-scrollbar]:hidden max-md:mask-[linear-gradient(to_right,transparent,black_10px,black_calc(100%-10px),transparent)]"
+      className={NAV_CLASS}
     >
       {/* No gap: spacing is padding on each link, so the pointer never rests in a dead zone that would make the current page flicker back on between two links */}
       <ul className="nav-list mx-auto flex w-max items-center gap-0.5">

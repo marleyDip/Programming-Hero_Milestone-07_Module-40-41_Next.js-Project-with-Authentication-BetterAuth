@@ -1,12 +1,12 @@
-import { getCategoryNews } from "@/lib/api";
+import { getCategoryNews, getScrapableCategories } from "@/lib/api";
 import { Metadata } from "next";
 
 import { notFound } from "next/navigation";
 
-// export async function generateStaticParams() {
-//   const categories = await getScrapableCategories();
-//   return categories.map((category) => ({ categoryId: category.slug }));
-// }
+export async function generateStaticParams() {
+  const categories = await getScrapableCategories();
+  return categories.map((category) => ({ categoryId: category.slug }));
+}
 
 // What you had: a hand-written type
 interface CategoryProps {
