@@ -5,8 +5,27 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      // disallow: ["/admin/", "/api/"],
     },
 
-    sitemap: "https://www.banglanews24.com/sitemap.xml",
+    sitemap: "https://bangla-brief.vercel.app/sitemap.xml",
   };
 }
+
+/* 
+                    SEO
+                     │
+          ┌──────────┴──────────┐
+          │                     │
+      Metadata             Crawling
+          │                     │
+   ┌──────┴──────┐        ┌─────┴─────┐
+   │             │        │           │
+ title       description  robots    sitemap
+   │
+   ├── canonical
+   ├── Open Graph
+   ├── Twitter/X
+   └── JSON-LD
+
+*/

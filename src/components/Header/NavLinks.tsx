@@ -3,6 +3,7 @@ import NavLinkList, { type NavItem } from "./NavLinkList";
 
 const NavLinks = async () => {
   const categories = await getScrapableCategories();
+  // console.log(categories);
 
   const items: NavItem[] = [
     { href: "/", label: "হোম" },
@@ -11,6 +12,8 @@ const NavLinks = async () => {
       label: category.title,
     })),
   ];
+
+  // console.log(items);
 
   return <NavLinkList items={items} />;
 };

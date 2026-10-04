@@ -12,7 +12,7 @@ const notoSerifBengali = Noto_Serif_Bengali({
   display: "swap",
 });
 
-const SITE_URL = "https://www.banglanews24.com";
+const SITE_URL = "https://bangla-brief.vercel.app/";
 const SITE_NAME = "Bangla News 24";
 
 const DESCRIPTION =
