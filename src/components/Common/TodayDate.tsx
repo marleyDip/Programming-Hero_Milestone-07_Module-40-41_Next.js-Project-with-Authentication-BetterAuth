@@ -5,9 +5,11 @@ const TodayDate = async ({ className }: { className?: string }) => {
   "use cache";
   cacheLife("minutes");
 
+  const now = new Date();
+
   return (
-    <time dateTime={toIsoDate()} className={className}>
-      {formatBanglaDate()}
+    <time dateTime={toIsoDate(now)} className={className}>
+      {formatBanglaDate(now)}
     </time>
   );
 };

@@ -83,6 +83,18 @@
   @apply focus-ring;
 }
 
+/* Headline underline that draws itself on hover. Needs a parent with "group". */
+@utility title-link {
+  @apply bg-linear-to-r from-danger to-danger bg-size-[0%_2px] bg-bottom bg-no-repeat pb-0.5 box-decoration-clone transition-[background-size] duration-500 motion-reduce:transition-none;
+  @apply group-hover:bg-size-[100%_2px];
+}
+
+/* Same, in white, for text over photos */
+@utility title-link-light {
+  @apply bg-linear-to-r from-white to-white bg-size-[0%_2px] bg-bottom bg-no-repeat pb-0.5 box-decoration-clone transition-[background-size] duration-500 motion-reduce:transition-none;
+  @apply group-hover:bg-size-[100%_2px];
+}
+
 /* News ticker */
 .ticker-track {
   animation: ticker var(--ticker-duration, 60s) linear infinite;

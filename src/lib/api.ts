@@ -1,4 +1,4 @@
-import type { CategoryNews, Headline, Navbar } from "@/lib/types";
+import type { CategoryNews, Headline, Navbar, Section } from "@/lib/types";
 import { cacheLife, cacheTag } from "next/cache";
 
 const API_URL = "https://news-api-v2.vercel.app/api";
@@ -30,6 +30,25 @@ export const getScrapableCategories = async (): Promise<Navbar[]> =>
 
 export const categoryHref = (slug: string): string =>
   slug.startsWith("/category/") ? slug : `/category/${slug}`;
+
+/* Accepts "politics", "/politics", "category/politics" or "/category/politics". */
+// export const categoryHref = (slug: string): string => `/category/${slug.replace(/^\/+/, "").replace(/^category\//, "")}`;
+
+/** ".../topics/c907347rezkt" -> "c907347rezkt" */
+const topicIdFromLink = (link: string | null | undefined) =>
+  link?.match(/\/topics\/([^/?#]+)/)?.[1];
+
+/** The /category/... page for a section, or undefined when no category matches. */
+export const getSectionHref = (
+  section: Section,
+  categories: Navbar[],
+): string | undefined => {
+  const topicId = topicIdFromLink(section.link);
+  if (!topicId) return undefined;
+
+  const category = categories.find((c) => c.topicId === topicId);
+  return category ? categoryHref(category.slug) : undefined;
+};
 
 /** null = unknown or empty category (the page shows a 404). Throws on API failure. */
 export const getCategoryNews = async (
@@ -76,6 +95,49 @@ const fetchHeadlines = async (limit: number): Promise<Headline[]> => {
 export const getHeadlines = async (limit = 10): Promise<Headline[]> => {
   try {
     return await fetchHeadlines(limit);
+  } catch {
+    return [];
+  }
+};
+
+export const getSections = async (): Promise<Section[]> => {
+  "use cache";
+
+  cacheLife("minutes");
+  cacheTag("news", "sections");
+
+  const res = await fetch(`${API_URL}/news/sections`);
+  if (!res.ok) throw new Error(`Sections API failed: ${res.status}`);
+
+  const data = await res.json();
+  const sections: Section[] = data.data ?? [];
+
+  // Drop the "follow us on WhatsApp / Instagram" blocks: their items are
+  // external links, not articles, and would link to a broken /news/<url>
+  return sections
+    .map((s) => ({
+      ...s,
+      articles: s.articles.filter((a) => a.type !== "link"),
+    }))
+    .filter((s) => s.articles.length > 0);
+};
+
+const fetchMostRead = async (): Promise<Headline[]> => {
+  "use cache";
+
+  cacheLife("minutes");
+  cacheTag("news", "most-read");
+
+  const res = await fetch(`${API_URL}/news/most-read`);
+  if (!res.ok) throw new Error(`Most-read API failed: ${res.status}`);
+
+  const data = await res.json();
+  return data.data ?? [];
+};
+
+export const getMostRead = async (): Promise<Headline[]> => {
+  try {
+    return await fetchMostRead();
   } catch {
     return [];
   }

@@ -14,6 +14,33 @@ export const formatBanglaDate = (
   });
 
 /**
+ * "৪ অক্টোবর, ২০২৬ এ ১:২১ PM" in Dhaka time.
+ * Takes the article's own timestamp, so it never reads the current time.
+ * Returns "" for a missing or invalid value, so callers can simply skip it.
+ */
+export const formatBanglaDateTime = (
+  value: Date | string | number | null | undefined,
+): string => {
+  if (value == null) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const day = date.toLocaleDateString("bn-BD", {
+    dateStyle: "long",
+    timeZone: TIME_ZONE,
+  });
+  const time = date.toLocaleTimeString("bn-BD", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: TIME_ZONE,
+  });
+
+  return `${day} এ ${time}`;
+};
+
+/**
  * "YYYY-MM-DD" for the Dhaka calendar day, for <time dateTime={...}>.
  * Defaults to today.
  */
