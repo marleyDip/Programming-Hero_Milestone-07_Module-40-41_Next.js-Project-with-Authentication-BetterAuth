@@ -1,4 +1,28 @@
+// app/sitemap.ts
+import { categoryHref, getScrapableCategories } from "@/lib/api";
+import { SITE_URL } from "@/lib/site";
 import type { MetadataRoute } from "next";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const categories = await getScrapableCategories();
+  // console.log(categories);
+
+  return [
+    {
+      url: SITE_URL,
+      changeFrequency: "hourly",
+      priority: 1,
+    },
+
+    ...categories.map((category) => ({
+      url: `${SITE_URL}${categoryHref(category.slug)}`,
+      changeFrequency: "hourly" as const,
+      priority: 0.8,
+    })),
+  ];
+}
+
+/* import type { MetadataRoute } from "next";
 
 const SITE_URL = "https://bangla-brief.vercel.app/";
 
@@ -23,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
   ];
-}
+} */
 
 /* 
   "always"

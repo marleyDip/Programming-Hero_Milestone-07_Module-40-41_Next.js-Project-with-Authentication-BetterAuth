@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site";
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
@@ -5,10 +6,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/search"],
+
       // disallow: ["/admin/", "/api/"],
     },
 
-    sitemap: "https://bangla-brief.vercel.app/sitemap.xml",
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    // sitemap: "https://bangla-brief.vercel.app/sitemap.xml",
   };
 }
 

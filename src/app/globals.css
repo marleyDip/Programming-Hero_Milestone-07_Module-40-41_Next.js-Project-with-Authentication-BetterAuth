@@ -4,9 +4,15 @@
   /* colors */
   --color-danger: #c40004;
   --color-danger-foreground: #a20910;
+  --color-danger-secondary: ##870005;
 
   --color-panel: #404040;
+  --color-panel-secondary: #525252;
+  --color-panel-accent: #a1a1a1;
   --color-panel-foreground: ##171717;
+
+  --color-border: #808080;
+  --color-border-secondary: #e5e5e5;
 
   --color-secondary: #9fc700;
   --color-accent: #1a2312;

@@ -8,6 +8,7 @@ const MostRead = async () => {
   return (
     <section
       aria-labelledby="most-read-title"
+      // className="rounded-2xl border border-black/5 bg-white/70 p-5 shadow-sm backdrop-blur-xl"
       className="rounded-2xl border border-neutral-200 bg-white p-5"
     >
       <h2

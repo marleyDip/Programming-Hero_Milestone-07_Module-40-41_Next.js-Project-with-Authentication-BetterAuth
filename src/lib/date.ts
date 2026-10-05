@@ -30,6 +30,7 @@ export const formatBanglaDateTime = (
     dateStyle: "long",
     timeZone: TIME_ZONE,
   });
+
   const time = date.toLocaleTimeString("bn-BD", {
     hour: "numeric",
     minute: "2-digit",
@@ -38,6 +39,34 @@ export const formatBanglaDateTime = (
   });
 
   return `${day} এ ${time}`;
+};
+
+/** Bangla date pieces in Dhaka time. Returns null for a missing or invalid value. */
+export const getBanglaDateParts = (
+  value: Date | string | number | null | undefined,
+) => {
+  if (value == null) return null;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+
+  const tz = { timeZone: TIME_ZONE };
+
+  return {
+    iso: date.toISOString(),
+    day: date.toLocaleDateString("bn-BD", { day: "numeric", ...tz }), // ৪
+    month: date.toLocaleDateString("bn-BD", { month: "short", ...tz }), // অক্টো
+    monthLong: date.toLocaleDateString("bn-BD", { month: "long", ...tz }), // অক্টোবর
+    weekday: date.toLocaleDateString("bn-BD", { weekday: "long", ...tz }), // রবিবার
+    year: date.toLocaleDateString("bn-BD", { year: "numeric", ...tz }), // ২০২৬
+
+    time: date.toLocaleTimeString("bn-BD", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      ...tz,
+    }), // ৮:৩০ PM
+  };
 };
 
 /**

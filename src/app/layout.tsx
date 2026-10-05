@@ -6,6 +6,7 @@ import type { Metadata, Viewport } from "next";
 import { Noto_Serif_Bengali } from "next/font/google";
 
 import Marquee from "@/components/Marquee";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const notoSerifBengali = Noto_Serif_Bengali({
@@ -13,11 +14,10 @@ const notoSerifBengali = Noto_Serif_Bengali({
   display: "swap",
 });
 
-const SITE_URL = "https://bangla-brief.vercel.app/";
-const SITE_NAME = "Bangla News 24";
+// const SITE_URL = "https://bangla-brief.vercel.app/";
+// const SITE_NAME = "Bangla News 24";
 
-const DESCRIPTION =
-  "বাংলা সংবাদ, এক জায়গায়। বাংলাদেশের আজকের ব্রেকিং নিউজ, রাজনীতি, অর্থনীতি, খেলা, বিনোদন ও আন্তর্জাতিক খবর সবার আগে পড়ুন।";
+// const SITE_DESCRIPTION = "বাংলা সংবাদ, এক জায়গায়। বাংলাদেশের আজকের ব্রেকিং নিউজ, রাজনীতি, অর্থনীতি, খেলা, বিনোদন ও আন্তর্জাতিক খবর সবার আগে পড়ুন।";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
 
-  description: DESCRIPTION,
+  description: SITE_DESCRIPTION,
 
   applicationName: SITE_NAME,
 
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
 
     title: `${SITE_NAME} | বাংলা সংবাদ, এক জায়গায়`,
-    description: DESCRIPTION,
+    description: SITE_DESCRIPTION,
 
     images: [
       {
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
 
     title: `${SITE_NAME} | বাংলা সংবাদ, এক জায়গায়`,
-    description: DESCRIPTION,
+    description: SITE_DESCRIPTION,
 
     images: ["/opengraph-image.png"],
   },

@@ -2,7 +2,72 @@ import NewsCard from "@/components/Common/NewsCard";
 import MainNews from "@/components/Home/MainNews";
 import MostRead from "@/components/Home/MostRead";
 import SectionHeading from "@/components/Home/SectionHeading";
+import JsonLd from "@/components/SEO/JsonLd";
+
 import { getScrapableCategories, getSectionHref, getSections } from "@/lib/api";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+
+import type { Metadata } from "next";
+
+const TITLE = `${SITE_NAME} - আজকের সর্বশেষ খবর | বাংলা সংবাদ`;
+
+export const metadata: Metadata = {
+  // "absolute" skips the "%s | Bangla News 24" template from the layout
+  title: { absolute: TITLE },
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+    languages: { "bn-BD": "/" },
+  },
+
+  // A page's openGraph replaces the layout's completely, so repeat siteName and locale
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: SITE_NAME,
+    locale: "bn_BD",
+    title: TITLE,
+    description: SITE_DESCRIPTION,
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: SITE_DESCRIPTION,
+  },
+};
+
+const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "NewsMediaOrganization",
+      "@id": `${SITE_URL}/#organization`,
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.webp` },
+      // sameAs: ["https://www.facebook.com/yourpage", "https://www.youtube.com/@yourchannel"],
+    },
+
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      inLanguage: "bn-BD",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+};
 
 export default async function Home() {
   // const [lead, ...sections] = await getSections();
@@ -14,6 +79,7 @@ export default async function Home() {
   ]);
 
   // console.log(categories);
+  // console.log(lead);
 
   if (!lead) {
     return (
@@ -25,6 +91,8 @@ export default async function Home() {
 
   return (
     <div className="px-4 py-8">
+      <JsonLd data={homeJsonLd} />
+
       <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
         {/* News */}
         <div className="space-y-12">
@@ -47,6 +115,12 @@ export default async function Home() {
         </div>
 
         {/* Most read stays in view while scrolling on large screens */}
+        {/*  <aside className="hidden lg:block">
+          <div className="sticky top-24 max-h-[calc(100vh-72px)] overflow-y-auto overscroll-contain pr-2 scrollbar:none [&::-webkit-scrollbar]:hidden">
+            <MostRead />
+          </div>
+        </aside> */}
+
         <aside>
           <div className="lg:sticky lg:top-24">
             <MostRead />
