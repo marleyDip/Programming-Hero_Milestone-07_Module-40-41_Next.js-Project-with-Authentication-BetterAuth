@@ -149,7 +149,7 @@ export async function generateMetadata({
  *
  */
 
-const CategoryNews = async (props: PageProps<"/category/[categoryId]">) => {
+const CategoryNews1 = async (props: PageProps<"/category/[categoryId]">) => {
   const { categoryId } = await props.params;
   const category = await getCategoryNews(categoryId);
 
@@ -197,7 +197,7 @@ const CategoryNews = async (props: PageProps<"/category/[categoryId]">) => {
   );
 };
 
-export default CategoryNews;
+export default CategoryNews1;
 
 /* <div className="mt-8 space-y-7">
       <header className="relative">

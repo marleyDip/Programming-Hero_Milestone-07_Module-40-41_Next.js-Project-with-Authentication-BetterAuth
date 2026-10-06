@@ -72,6 +72,9 @@ const homeJsonLd = {
 export default async function Home() {
   // const [lead, ...sections] = await getSections();
 
+  // Temporary delay for testing loading.tsx
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   // Both are cached, so fetching them together costs nothing extra
   const [[lead, ...sections], categories] = await Promise.all([
     getSections(),
@@ -130,6 +133,33 @@ export default async function Home() {
     </div>
   );
 }
+
+/*  
+app/
+│
+├── loading.tsx
+│       ↓
+│   Generic global skeleton
+│
+├── (home)/
+│   ├── page.tsx
+│   │       ↓
+│   │   Homepage
+│   │
+│   └── loading.tsx
+│           ↓
+│       Homepage skeleton
+│
+├── category/
+│   └── [categoryId]/
+│       ├── page.tsx
+│       └── loading.tsx
+│
+└── news/
+    └── [newsId]/
+        ├── page.tsx
+        └── loading.tsx
+*/
 
 // import MainNews from "@/components/MainNews";
 
