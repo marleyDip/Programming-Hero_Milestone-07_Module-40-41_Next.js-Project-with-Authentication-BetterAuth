@@ -1,49 +1,13 @@
-import { getCategoryNews, getScrapableCategories } from "@/lib/api";
+import NewsCard from "@/components/Common/NewsCard";
+import { getCategoryNews } from "@/lib/api";
 import { Metadata } from "next";
 
 import { notFound } from "next/navigation";
-
-export async function generateStaticParams() {
-  const categories = await getScrapableCategories();
-  return categories.map((category) => ({ categoryId: category.slug }));
-}
 
 // What you had: a hand-written type
 interface CategoryProps {
   params: Promise<{ categoryId: string }>;
 }
-
-/* export async function generateMetadata({
-  params,
-}: PageProps<"/category/[categoryId]">): Promise<Metadata> {
-  const { categoryId } = await params;
-  const category = await getCategoryNews(categoryId);
-
-  if (!category) return {};
-
-  return {
-    title: category.title,
-    description: `${category.title} বিভাগের সর্বশেষ খবর।`,
-    alternates: { canonical: `/category/${categoryId}` },
-  };
-} */
-
-/* const CategoryNews = async ({ params }: CategoryProps) => {
-  const { categoryId } = await params;
-  const data = await getCategoryNews(categoryId);
-
-  // API request failed or category doesn't exist
-  if (!data) {
-    notFound();
-  }
-
-  const categoryNews: News[] = data.data ?? [];
-
-  // Category exists but has no news
-  if (!categoryNews.length) {
-    notFound();
-  }
-}; */
 
 /**
  * Generate dynamic SEO metadata for each category.
@@ -156,69 +120,44 @@ const CategoryNews = async (props: PageProps<"/category/[categoryId]">) => {
 
   if (!category) notFound();
 
-  // const { title, news } = category;
+  const { title, news } = category;
 
   return (
-    <div>
-      <h1 className="mb-5 border-b-2 border-danger text-2xl font-bold">
-        {category?.title}
-      </h1>
+    <main className="mt-8">
+      {/* Section Header */}
+      <header className="mb-6 relative">
+        <div className="flex items-center gap-3">
+          <span className="h-7 w-1 rounded-full bg-danger" />
 
-      {/* Render categoryNews here */}
-    </div>
+          <h1 className="text-3xl font-black tracking-tight text-panel-foreground sm:text-4xl">
+            {title}
+          </h1>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between border-y border-neutral-200 py-2.5">
+          <span className="text-xs font-semibold tracking-wide text-panel-secondary uppercase">
+            সর্বশেষ খবর
+          </span>
+
+          <span className="text-xs text-panel-secondary">
+            {news.length}টি সংবাদ
+          </span>
+        </div>
+
+        <div className="absolute -bottom-px left-0 h-0.5 w-16 rounded-full bg-danger" />
+      </header>
+
+      {/* Newspaper Grid */}
+      <section
+        aria-label={`${title} বিভাগের সংবাদ`}
+        className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {news.map((news) => (
+          <NewsCard key={news.id} news={news} />
+        ))}
+      </section>
+    </main>
   );
 };
 
 export default CategoryNews;
-
-// import { notFound } from "next/navigation";
-
-// interface News {
-//   id: string;
-//   title: string;
-//   description: string;
-//   category: string;
-//   imageUrl: string;
-//   imageAlt: string;
-// }
-
-// interface Props {
-//   params: Promise<{
-//     categoryId: string;
-//   }>;
-// }
-
-// const CategoryNews = async ({ params }: Props) => {
-//   const { categoryId } = await params;
-//   // console.log(categoryId);
-
-//   const res = await fetch(
-//     `https://news-api-v2.vercel.app/api/category/${categoryId}`,
-//   );
-
-//   // console.log(res);
-
-//   if (!res.ok) {
-//     notFound();
-//   }
-
-//   const data = await res.json();
-
-//   const categoryNews: News[] = data.data;
-
-//   if (!categoryNews?.length) {
-//     notFound();
-//   }
-
-//   return (
-//     <div>
-//       <h1 className="mb-5 border-b-2 border-red-700 text-2xl font-bold">
-//         {data.title}
-//       </h1>
-
-//       {/* Render categoryNews here */}
-//     </div>
-//   );
-// };
-
-// export default CategoryNews;

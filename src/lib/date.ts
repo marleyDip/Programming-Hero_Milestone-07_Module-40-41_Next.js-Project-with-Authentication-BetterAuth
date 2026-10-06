@@ -18,13 +18,48 @@ export const formatBanglaDate = (
  * Takes the article's own timestamp, so it never reads the current time.
  * Returns "" for a missing or invalid value, so callers can simply skip it.
  */
-export const formatBanglaDateTime = (
+/* export const formatBanglaDateTime = (
   value: Date | string | number | null | undefined,
 ): string => {
   if (value == null) return "";
 
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "";
+
+  const day = date.toLocaleDateString("bn-BD", {
+    dateStyle: "long",
+    timeZone: TIME_ZONE,
+  });
+
+  const time = date.toLocaleTimeString("bn-BD", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: TIME_ZONE,
+  });
+
+  return `${day} এ ${time}`;
+}; */
+
+/**
+ * "৪ অক্টোবর, ২০২৬ এ ১:২১ PM" in Dhaka time.
+ *
+ * With a valid timestamp it returns date and time. With a missing or invalid one it
+ * returns "" by default, or today's date (no time) when `fallbackToToday` is true.
+ *
+ * `fallbackToToday` reads the current time, so with Cache Components it may only be
+ * used inside a "use cache" function or component.
+ */
+export const formatBanglaDateTime = (
+  value: Date | string | number | null | undefined,
+  { fallbackToToday = false }: { fallbackToToday?: boolean } = {},
+): string => {
+  const parsed = value == null ? null : new Date(value);
+  const date = parsed && !Number.isNaN(parsed.getTime()) ? parsed : null;
+
+  if (!date) {
+    return fallbackToToday ? formatBanglaDate(new Date(), "long") : "";
+  }
 
   const day = date.toLocaleDateString("bn-BD", {
     dateStyle: "long",

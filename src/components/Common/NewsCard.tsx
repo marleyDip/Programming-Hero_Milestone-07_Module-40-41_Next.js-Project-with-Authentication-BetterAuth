@@ -53,6 +53,42 @@ const NewsCard = ({ news }: { news: News }) => {
 
 export default NewsCard;
 
+/* <article className="group">
+  <Link href={`/news/${news.id}`} className="block">
+    <div className="relative aspect-16/10 overflow-hidden bg-neutral-100">
+      <Image
+        fill
+        src={news.imageUrl}
+        alt={news.imageAlt || news.title}
+        sizes="(min-width: 1024px) 30vw, (min-width: 640px) 50vw, 100vw"
+        className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
+      />
+    </div>
+
+    <div className="pt-4">
+      <div className="mb-2 flex items-center gap-2">
+        <span className="text-[11px] font-bold tracking-[0.12em] text-danger uppercase">
+          {news.category}
+        </span>
+
+        <span className="h-px w-6 bg-neutral-300" />
+      </div>
+
+      <h2 className="line-clamp-3 text-[19px] leading-[1.4] font-bold tracking-tight text-panel-foreground transition-colors duration-300 group-hover:text-danger">
+        {news.title}
+      </h2>
+   
+      <p className="mt-2 line-clamp-2 text-sm leading-5.5 text-panel-secondary">
+        {news.description}
+      </p>
+
+      <div className="mt-4 border-t border-neutral-200 pt-3">
+        <CardFooter publishedAt={news.lastPublished} />
+      </div>
+    </div>
+  </Link>
+</article> */
+
 // import type { News } from "@/lib/types";
 // import Image from "next/image";
 // import Link from "next/link";
