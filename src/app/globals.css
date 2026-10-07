@@ -4,7 +4,7 @@
   /* colors */
   --color-danger: #c40004;
   --color-danger-foreground: #a20910;
-  --color-danger-secondary: ##870005;
+  --color-danger-secondary: #870005;
 
   --color-panel: #404040;
   --color-panel-secondary: #525252;
@@ -60,6 +60,41 @@
     .nav-list:hover .nav-link[aria-current="page"]:not(:hover) {
       @apply bg-transparent text-neutral-700 after:scale-x-0;
     }
+  }
+
+  /* 🏷️ Form Group Wrapper */
+  .form-group {
+    @apply flex flex-col w-full;
+  }
+
+  /* 📝 Input Field Label */
+  .form-label {
+    @apply mb-2 block text-sm font-semibold text-neutral-800;
+  }
+
+  /* 📦 Relative Wrapper for Input + Icon */
+  .input-wrapper {
+    @apply relative w-full;
+  }
+
+  /* 🎨 Premium Icon Input Fields */
+  .form-input-icon {
+    @apply h-12 w-full rounded-xl border border-neutral-200 bg-neutral-50/50 text-sm text-neutral-900 outline-none transition-all;
+    @apply pr-4 pl-11;
+    @apply placeholder:text-neutral-400;
+    @apply focus:border-violet-500 focus:bg-white focus:ring-4 focus:ring-violet-500/10;
+  }
+
+  /* 🔒 Absoluted Left Side Icons */
+  .input-left-icon {
+    @apply pointer-events-none absolute top-1/2 left-3.5 size-4.5 -translate-y-1/2 text-neutral-400;
+  }
+
+  /* 👁️ Clickable Right-Side Interactive Icon Button */
+  .input-right-btn {
+    @apply absolute top-1/2 right-3.5 -translate-y-1/2 text-neutral-400;
+    @apply hover:text-neutral-600 transition-colors p-1 rounded-md cursor-pointer;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/20;
   }
 }
 

@@ -83,7 +83,7 @@ export default async function Home() {
 
   // console.log(categories);
   // console.log(lead);
-  console.log(sections);
+  // console.log(sections);
 
   if (!lead) {
     return (
