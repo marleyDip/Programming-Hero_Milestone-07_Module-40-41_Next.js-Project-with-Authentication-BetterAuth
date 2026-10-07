@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-const NewsDetailsPage = async (props: PageProps<"/news/[newsId]">) => {
+const NewsDetailsPage1 = async (props: PageProps<"/news/[newsId]">) => {
   const { newsId } = await props.params;
 
   const news = await getNewsDetails(newsId);
@@ -12,10 +12,10 @@ const NewsDetailsPage = async (props: PageProps<"/news/[newsId]">) => {
     notFound();
   }
 
-  const publishedDate = new Intl.DateTimeFormat("bn-BD", {
+  /* const publishedDate = new Intl.DateTimeFormat("bn-BD", {
     dateStyle: "long",
     timeStyle: "short",
-  }).format(new Date(news.firstPublished));
+  }).format(new Date(news.firstPublished)); */
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8">
@@ -29,9 +29,9 @@ const NewsDetailsPage = async (props: PageProps<"/news/[newsId]">) => {
             className="h-1 w-1 rounded-full bg-neutral-300"
           />
 
-          <time dateTime={news.firstPublished} className="text-neutral-500">
+          {/* <time dateTime={news.firstPublished} className="text-neutral-500">
             {publishedDate}
-          </time>
+          </time> */}
         </div>
 
         {/* Title */}
@@ -155,7 +155,7 @@ const NewsDetailsPage = async (props: PageProps<"/news/[newsId]">) => {
   );
 };
 
-export default NewsDetailsPage;
+export default NewsDetailsPage1;
 
 /* import { notFound } from "next/navigation";
 
