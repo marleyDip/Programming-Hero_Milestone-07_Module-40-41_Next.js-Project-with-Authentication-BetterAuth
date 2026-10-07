@@ -70,10 +70,10 @@ const homeJsonLd = {
 };
 
 export default async function Home() {
-  // const [lead, ...sections] = await getSections();
-
   // Temporary delay for testing loading.tsx
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
+
+  // const [lead, ...sections] = await getSections();
 
   // Both are cached, so fetching them together costs nothing extra
   const [[lead, ...sections], categories] = await Promise.all([
@@ -83,6 +83,7 @@ export default async function Home() {
 
   // console.log(categories);
   // console.log(lead);
+  console.log(sections);
 
   if (!lead) {
     return (

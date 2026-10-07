@@ -52,7 +52,7 @@ export const formatBanglaDate = (
  */
 export const formatBanglaDateTime = (
   value: Date | string | number | null | undefined,
-  { fallbackToToday = false }: { fallbackToToday?: boolean } = {},
+  { fallbackToToday = true }: { fallbackToToday?: boolean } = {},
 ): string => {
   const parsed = value == null ? null : new Date(value);
   const date = parsed && !Number.isNaN(parsed.getTime()) ? parsed : null;

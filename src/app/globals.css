@@ -141,6 +141,31 @@
   }
 }
 
+/* Reading progress bar on article pages */
+@supports (animation-timeline: scroll()) {
+  .read-progress {
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: read-progress linear both;
+    animation-timeline: scroll(root);
+  }
+  @keyframes read-progress {
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+@supports not (animation-timeline: scroll()) {
+  .read-progress {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .read-progress {
+    display: none;
+  }
+}
+
 /* 404 page animations */
 @keyframes nf-rise {
   from {

@@ -30,3 +30,52 @@ export interface Section {
   link: string | null; // BBC topic page, e.g. ".../topics/c907347rezkt"
   articles: News[];
 }
+
+// export interface NewsBodyImage {}
+export interface ArticleImageBlock {
+  type: "image";
+  url: string;
+  width: number;
+  height: number;
+  caption?: string;
+  altText?: string;
+  copyrightHolder?: string;
+}
+
+// export interface NewsBodyText {}
+export interface ArticleTextBlock {
+  type: "text";
+  text: string; // several paragraphs separated by line breaks
+}
+
+// export type NewsBodyBlock = NewsBodyImage | NewsBodyText;
+export type ArticleBlock = ArticleImageBlock | ArticleTextBlock;
+
+// export interface Article {}
+export interface NewsDetails {
+  id: string;
+  title: string;
+  description: string;
+  link: string;
+  firstPublished?: string;
+  lastPublished?: string;
+
+  byline: {
+    name: string;
+    role: string | null;
+  }[];
+
+  topics: {
+    id: string;
+    name: string;
+  }[];
+
+  tags: string[];
+  imageUrl: string;
+  body: ArticleBlock[];
+  text: string;
+
+  wordCount: number;
+  source: string;
+  sourceUrl: string;
+}

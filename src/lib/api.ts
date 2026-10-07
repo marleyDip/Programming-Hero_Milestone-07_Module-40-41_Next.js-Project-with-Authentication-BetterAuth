@@ -1,11 +1,18 @@
-import type { CategoryNews, Headline, Navbar, Section } from "@/lib/types";
+import type {
+  CategoryNews,
+  Headline,
+  Navbar,
+  NewsDetails,
+  Section,
+} from "@/lib/types";
 import { cacheLife, cacheTag } from "next/cache";
 
 const API_URL = "https://news-api-v2.vercel.app/api";
 
+/* ===== Category - Straight from the site nav. "/api/categories" ===== */
+
 const fetchCategories = async (): Promise<Navbar[]> => {
   "use cache";
-
   cacheLife("hours"); // categories rarely change
   cacheTag("categories");
 
@@ -50,12 +57,82 @@ export const getSectionHref = (
   return category ? categoryHref(category.slug) : undefined;
 };
 
+/* ===== Latest headlines -  Supports limit, offset, category, q. "/api/news?limit=10" ===== */
+
+/* Fetch news limit 10 */
+const fetchHeadlines = async (limit: number): Promise<Headline[]> => {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("news", "headlines");
+
+  const res = await fetch(`${API_URL}/news?limit=${limit}`);
+  if (!res.ok) throw new Error(`Headlines API failed: ${res.status}`);
+
+  const data = await res.json();
+  return data.data ?? [];
+};
+
+/* Never throws: if the API is down the ticker simply doesn't render. */
+export const getHeadlines = async (limit = 10): Promise<Headline[]> => {
+  try {
+    return await fetchHeadlines(limit);
+  } catch {
+    return [];
+  }
+};
+
+/* ===== Homepage sections - Home Page Main News "/api/news/sections" ===== */
+
+export const getSections = async (): Promise<Section[]> => {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("news", "sections");
+
+  const res = await fetch(`${API_URL}/news/sections`);
+  if (!res.ok) throw new Error(`Sections API failed: ${res.status}`);
+
+  const data = await res.json();
+  const sections: Section[] = data.data ?? [];
+
+  // Drop the "follow us on WhatsApp / Instagram" blocks: their items are
+  // external links, not articles, and would link to a broken /news/<url>
+  return sections
+    .map((s) => ({
+      ...s,
+      articles: s.articles.filter((a) => a.type !== "link"),
+    }))
+    .filter((s) => s.articles.length > 0);
+};
+
+/* ===== Most read - Ranked "/api/news/most-read" ===== */
+
+const fetchMostRead = async (): Promise<Headline[]> => {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("news", "most-read");
+
+  const res = await fetch(`${API_URL}/news/most-read`);
+  if (!res.ok) throw new Error(`Most-read API failed: ${res.status}`);
+
+  const data = await res.json();
+  return data.data ?? [];
+};
+
+export const getMostRead = async (): Promise<Headline[]> => {
+  try {
+    return await fetchMostRead();
+  } catch {
+    return [];
+  }
+};
+
+/* ===== One category - slug "/api/category/technology" ===== */
+
 /** null = unknown or empty category (the page shows a 404). Throws on API failure. */
 export const getCategoryNews = async (
   categoryId: string,
 ): Promise<CategoryNews | null> => {
   "use cache";
-
   cacheLife("minutes"); // stale after 5 min, refreshed in the background after 1 min
   cacheTag("news", `category-${categoryId}`);
 
@@ -77,68 +154,76 @@ export const getCategoryNews = async (
   };
 };
 
-/* Fetch news limit 10 */
-const fetchHeadlines = async (limit: number): Promise<Headline[]> => {
+/* ===== Full article - Structured body blocks, byline, topics, tags, word count. "/api/article/{id}" ===== */
+
+// Statuses that mean "this id isn't an article we can show" (missing, video, live page...)
+const NOT_AVAILABLE = [400, 404, 410, 415, 422];
+
+export const getNewsDetails = async (
+  newsId: string,
+): Promise<NewsDetails | null> => {
   "use cache";
+  // cacheLife("minutes");
+  cacheLife("hours");
+  cacheTag("news", `article-${newsId}`);
 
-  cacheLife("minutes");
-  cacheTag("news", "headlines");
+  const res = await fetch(`${API_URL}/article/${encodeURIComponent(newsId)}`);
 
-  const res = await fetch(`${API_URL}/news?limit=${limit}`);
-  if (!res.ok) throw new Error(`Headlines API failed: ${res.status}`);
+  // if (res.status === 404) return null;
+  // if (res.status === 415) {
+  //   return null;
+  // }
 
-  const data = await res.json();
-  return data.data ?? [];
-};
-
-/* Never throws: if the API is down the ticker simply doesn't render. */
-export const getHeadlines = async (limit = 10): Promise<Headline[]> => {
-  try {
-    return await fetchHeadlines(limit);
-  } catch {
-    return [];
+  if (NOT_AVAILABLE.includes(res.status)) return null;
+  if (!res.ok) {
+    throw new Error(`Article API failed: ${res.status}`);
   }
-};
-
-export const getSections = async (): Promise<Section[]> => {
-  "use cache";
-
-  cacheLife("minutes");
-  cacheTag("news", "sections");
-
-  const res = await fetch(`${API_URL}/news/sections`);
-  if (!res.ok) throw new Error(`Sections API failed: ${res.status}`);
 
   const data = await res.json();
-  const sections: Section[] = data.data ?? [];
+  // return data.data ?? null;
 
-  // Drop the "follow us on WhatsApp / Instagram" blocks: their items are
-  // external links, not articles, and would link to a broken /news/<url>
-  return sections
-    .map((s) => ({
-      ...s,
-      articles: s.articles.filter((a) => a.type !== "link"),
-    }))
-    .filter((s) => s.articles.length > 0);
+  const article = data.data;
+  if (!article) return null;
+
+  return {
+    ...article,
+    byline: article.byline ?? [],
+    topics: article.topics ?? [],
+    tags: article.tags ?? [],
+    body: article.body ?? [],
+    wordCount: article.wordCount ?? 0,
+  };
 };
 
-const fetchMostRead = async (): Promise<Headline[]> => {
+/* export const getNewsDetails = async (
+  newsId: string,
+): Promise<NewsDetails | null> => {
   "use cache";
 
-  cacheLife("minutes");
-  cacheTag("news", "most-read");
+  cacheLife("hours");
+  cacheTag("news", `article-${newsId}`);
 
-  const res = await fetch(`${API_URL}/news/most-read`);
-  if (!res.ok) throw new Error(`Most-read API failed: ${res.status}`);
+  const res = await fetch(`${API_URL}/article/${encodeURIComponent(newsId)}`, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
-  const data = await res.json();
-  return data.data ?? [];
-};
+  if (res.status === 404) return null;
 
-export const getMostRead = async (): Promise<Headline[]> => {
-  try {
-    return await fetchMostRead();
-  } catch {
-    return [];
+  if (!res.ok) {
+    const errorBody = await res.text();
+
+    console.error("Article API failed:", {
+      status: res.status,
+      statusText: res.statusText,
+      body: errorBody,
+    });
+
+    throw new Error(`Article API failed: ${res.status}`);
   }
-};
+
+  const data = await res.json();
+
+  return data.data ?? null;
+}; */

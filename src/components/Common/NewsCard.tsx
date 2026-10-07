@@ -6,6 +6,8 @@ import Link from "next/link";
 import CardFooter from "./Cardfooter";
 
 const NewsCard = ({ news }: { news: News }) => {
+  // console.log(news);
+
   return (
     <Link
       href={`/news/${news.id}`}

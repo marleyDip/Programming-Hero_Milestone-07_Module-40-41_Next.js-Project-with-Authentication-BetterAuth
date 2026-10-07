@@ -137,6 +137,72 @@ const NotFound = async () => {
 
 export default NotFound;
 
+/* 
+import { ArrowLeft, SearchX } from "lucide-react";
+import Link from "next/link";
+
+const CategoryNotFound = () => {
+  return (
+    <main className="flex min-h-[60vh] items-center justify-center px-4 py-16">
+      <section
+        aria-labelledby="category-not-found-title"
+        className="w-full max-w-xl text-center"
+      >
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-danger/10 text-danger">
+          <SearchX size={30} strokeWidth={1.8} />
+        </div>
+
+        <div className="mt-6">
+          <p className="text-sm font-bold tracking-[0.16em] text-danger uppercase">
+            ক্যাটাগরি পাওয়া যায়নি
+          </p>
+
+          <h1
+            id="category-not-found-title"
+            className="mt-3 text-3xl font-black tracking-tight text-neutral-900 sm:text-4xl"
+          >
+            এই সংবাদ বিভাগটি খুঁজে পাওয়া যায়নি
+          </h1>
+
+          <p className="mx-auto mt-4 max-w-md text-sm leading-6 text-neutral-500 sm:text-base">
+            আপনি যে সংবাদ ক্যাটাগরিটি খুঁজছেন সেটি হয়তো সরানো হয়েছে, পরিবর্তন
+            করা হয়েছে অথবা বর্তমানে উপলভ্য নেই।
+          </p>
+        </div>
+
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link
+            href="/"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-danger px-5 text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-danger/20 focus-visible:ring-2 focus-visible:ring-danger/40 focus-visible:outline-none motion-reduce:transition-none"
+          >
+            <ArrowLeft size={17} />
+            হোমে ফিরে যান
+          </Link>
+
+          <Link
+            href="/category"
+            className="inline-flex h-11 items-center justify-center rounded-full border border-neutral-200 bg-white px-5 text-sm font-bold text-neutral-700 transition-colors duration-300 hover:border-danger/30 hover:bg-danger/5 hover:text-danger focus-visible:ring-2 focus-visible:ring-danger/40 focus-visible:outline-none motion-reduce:transition-none"
+          >
+            সব ক্যাটাগরি
+          </Link>
+        </div>
+
+        <div className="mx-auto mt-10 flex items-center justify-center gap-2">
+          <span className="h-px w-12 bg-neutral-200" />
+
+          <span className="h-1.5 w-1.5 rounded-full bg-danger" />
+
+          <span className="h-px w-12 bg-neutral-200" />
+        </div>
+      </section>
+    </main>
+  );
+};
+
+export default CategoryNotFound;
+
+*/
+
 // import type { Navbar } from "@/lib/types";
 // import type { Metadata } from "next";
 // import Link from "next/link";
