@@ -2,7 +2,7 @@ import NewsCardSkeleton from "@/components/Common/NewsCardSkeleton";
 
 const CategoryLoading = () => {
   return (
-    <main className="mt-8">
+    <main className="mt-8 mx-4 md:mx-6 lg:mx-8">
       {/* Section Header */}
       <header className="relative mb-6">
         <div className="flex items-center gap-3">

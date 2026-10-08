@@ -128,7 +128,7 @@ const CategoryNews = async (props: PageProps<"/category/[categoryId]">) => {
   const { title, news } = category;
 
   return (
-    <main className="mt-8">
+    <main className="mt-8 mx-4 md:mx-6 lg:mx-8">
       {/* Section Header */}
       <header className="mb-6 relative">
         <div className="flex items-center gap-3">

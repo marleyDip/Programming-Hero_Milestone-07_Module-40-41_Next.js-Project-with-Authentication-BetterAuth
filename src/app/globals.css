@@ -96,6 +96,26 @@
     @apply hover:text-neutral-600 transition-colors p-1 rounded-md cursor-pointer;
     @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/20;
   }
+
+  /* 🚨 Custom Red Accent (Danger) Form Input Field */
+  .form-input-danger {
+    /* Dimensions & Base Structures */
+    @apply h-12 w-full rounded-xl text-sm font-medium outline-none transition-all;
+
+    /* Layout Inner Spacing */
+    @apply pr-4 pl-11;
+
+    /* Styling Color States (Text, Background, Borders) */
+    @apply text-neutral-900 border border-neutral-200 bg-neutral-50/70;
+    @apply placeholder:text-neutral-400;
+
+    /* Interactive Focus States */
+    @apply focus:border-danger focus:bg-white;
+    @apply focus:ring-4 focus:ring-danger/10;
+
+    /* System Disabled/Locked States */
+    @apply disabled:cursor-not-allowed disabled:opacity-60;
+  }
 }
 
 /* One focus ring for the whole site. Override the gap per element with --focus-offset. */
