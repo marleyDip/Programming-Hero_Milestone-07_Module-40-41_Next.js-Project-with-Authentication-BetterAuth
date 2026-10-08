@@ -2,6 +2,7 @@
 import Image from "next/image";
 import TodayDate from "../Common/TodayDate";
 import NavLinks from "./NavLinks";
+import UserInfo from "./UserInfo";
 
 const Header = () => {
   // const date = formatBanglaDate();
@@ -9,15 +10,7 @@ const Header = () => {
   return (
     <header className="relative mx-auto max-w-7xl px-4 py-4">
       {/* Buttons: in flow above the logo on mobile, pinned top-right on md+ */}
-      <div className="mb-4 flex items-center justify-center gap-3 text-sm/[1.43] md:absolute md:top-4 md:right-4 md:mb-0 md:justify-end">
-        <button type="button" className="btn-glass px-3 py-1.5 ">
-          সাইন ইন
-        </button>
-
-        <button type="button" className="btn-premium px-4 py-1.5">
-          সাইন আপ
-        </button>
-      </div>
+      <UserInfo />
 
       {/* Logo */}
       <div className="flex flex-col items-center justify-center gap-1 sm:flex-row sm:gap-2">

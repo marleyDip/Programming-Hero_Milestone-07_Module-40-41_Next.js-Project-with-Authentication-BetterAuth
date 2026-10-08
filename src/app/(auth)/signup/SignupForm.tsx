@@ -1,16 +1,153 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { Eye, EyeOff, Link2, LockKeyhole, Mail, UserRound } from "lucide-react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
-const SignUpPage = () => {
+const SignupForm = () => {
+  const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
 
   // Smoothly flips the boolean state visibility flag back and forth
   const toggleVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  /* Manual Google */
+  const onSubmit = async (e: React.SubmitEvent<HTMLElement>) => {
+    // 1. Prevents the default browser page reload action
+    e.preventDefault();
+
+    // 2. Extracts all raw input key/value pairs out of the form
+    const formData = new FormData(e.target);
+
+    // formData.forEach((value, key) => {
+    //   console.log(`${key}: ${value}`);
+    // });
+    // name: Md Sofian Hasan, email: dip.akand9899@gmail.com
+
+    // console.log(Array.from(formData.entries()));
+    // [ ['name', 'Md Sofian Hasan'], ['email', 'dip.akand9899@gmail.com'] ]
+
+    // 3. Bundles those key/value pairs into a clean JavaScript object
+    const user = Object.fromEntries(formData.entries()) as {
+      name: string;
+      email: string;
+      image: string;
+      password: string;
+    };
+
+    // Object.fromEntries() - { "name": "Md Sofian Hasan","email": "dip.akand9899@gmail.com" }
+
+    // console.log(user);
+
+    const loadingToast = toast.loading("আপনার অ্যাকাউন্ট তৈরি করা হচ্ছে...");
+
+    const { data, error } = await authClient.signUp.email({
+      ...user,
+      callbackURL: "/",
+    });
+
+    toast.dismiss(loadingToast);
+
+    if (data) {
+      toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
+      console.log(data);
+
+      // 🟢 ক্লায়েন্ট সাইডে রিডাইরেক্ট করার একমাত্র সঠিক উপায়
+      router.push("/");
+
+      // redirect("/");
+    }
+
+    if (error) {
+      // toast.error(error.message || "অ্যাকাউন্ট তৈরি করা যায়নি।");
+      console.log(error);
+
+      let errorMessage = "অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।";
+
+      // if (error.message?.includes("already exists")) {
+      //   errorMessage = "এই ইমেইলটি দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট তৈরি করা আছে।";
+      // } else if (error.message) {
+      //   errorMessage = error.message;
+      // }
+
+      const errorCode =
+        "code" in error && typeof error.code === "string" ? error.code : "";
+
+      if (errorCode === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
+        errorMessage =
+          "এই ইমেইলটি দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট তৈরি করা আছে। অনুগ্রহ করে অন্য ইমেইল ব্যবহার করুন।";
+      } else if (errorCode === "PASSWORD_TOO_SHORT") {
+        errorMessage =
+          "আপনার পাসওয়ার্ডটি অত্যন্ত ছোট! অনুগ্রহ করে আরও দীর্ঘ বা শক্তিশালী পাসওয়ার্ড দিন।";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      toast.error(errorMessage);
+    }
+  };
+
+  /* const onSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    const name = formData.get("name");
+    const image = formData.get("image");
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    if (
+      typeof name !== "string" ||
+      typeof image !== "string" ||
+      typeof email !== "string" ||
+      typeof password !== "string"
+    ) {
+      return;
+    }
+
+    const loadingToast = toast.loading("আপনার অ্যাকাউন্ট তৈরি করা হচ্ছে...");
+
+    const { data, error } = await authClient.signUp.email({
+      name,
+      image,
+      email,
+      password,
+      callbackURL: "/",
+    });
+
+    toast.dismiss(loadingToast);
+
+    if (error) {
+      toast.error(error.message || "অ্যাকাউন্ট তৈরি করা যায়নি।");
+      console.error("Sign up failed:", error);
+      return;
+    }
+
+      toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
+
+    console.log("Sign up successful:", data);
+  }; */
+
+  /* Automatic Google */
+  const handleGoogleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+  };
+
+  /* Automatic Github */
+  const handleGithubSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "github",
+    });
   };
 
   return (
@@ -73,9 +210,11 @@ const SignUpPage = () => {
           <div className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.18)] sm:p-8">
             {/* Social signup */}
             <div className="grid grid-cols-2 gap-3">
+              {/* Google */}
               <button
                 type="button"
-                className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-neutral-200 bg-white text-sm font-semibold text-neutral-700 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-sm"
+                onClick={handleGoogleSignIn}
+                className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-neutral-200 bg-white text-sm font-semibold text-neutral-700 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-sm cursor-pointer"
               >
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4">
                   <path
@@ -98,9 +237,11 @@ const SignUpPage = () => {
                 Google
               </button>
 
+              {/* Github */}
               <button
                 type="button"
-                className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-neutral-200 bg-white text-sm font-semibold text-neutral-700 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-sm"
+                onClick={handleGithubSignIn}
+                className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-neutral-200 bg-white text-sm font-semibold text-neutral-700 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-sm cursor-pointer"
               >
                 <svg
                   className="w-4 h-4 text-muted fill-current transition-colors duration-300 group-hover:text-primary"
@@ -124,7 +265,7 @@ const SignUpPage = () => {
               <div className="h-px flex-1 bg-neutral-200" />
             </div>
 
-            <form className="space-y-5">
+            <form onSubmit={onSubmit} className="space-y-5">
               {/* Name */}
               <div className="form-group">
                 <label htmlFor="name" className="form-label">
@@ -147,7 +288,7 @@ const SignUpPage = () => {
 
               {/* Image URL */}
               <div className="form-group">
-                <label htmlFor="imageUrl" className="form-label">
+                <label htmlFor="image" className="form-label">
                   ImageURL
                 </label>
 
@@ -155,8 +296,8 @@ const SignUpPage = () => {
                   <Link2 className="input-left-icon" />
 
                   <input
-                    id="imageUrl"
-                    name="imageUrl"
+                    id="image"
+                    name="image"
                     type="url"
                     placeholder="https://example.com"
                     className="form-input-icon"
@@ -268,4 +409,31 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignupForm;
+
+/* import { authClient } from "@/lib/auth-client"; // Your Better Auth configuration script client
+
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  const formData = new FormData(e.target as HTMLFormElement);
+  const data = Object.fromEntries(formData.entries());
+
+  // 1. Better Auth strictly expects the key parameter to be named "image"
+  const { data: sessionData, error } = await authClient.signUp.email({
+    email: data.email as string,
+    password: data.password as string,
+    name: data.name as string,
+    
+    // 🟢 PASS THE URL HERE: Maps your form field parameter to Better Auth's image field
+    image: data.imageUrl as string, 
+    
+    callbackURL: "/dashboard"
+  }, {
+    onRequest: () => ,
+    onSuccess: () => ,
+    onError: (ctx) => { alert(ctx.error.message); }
+  });
+};
+
+*/

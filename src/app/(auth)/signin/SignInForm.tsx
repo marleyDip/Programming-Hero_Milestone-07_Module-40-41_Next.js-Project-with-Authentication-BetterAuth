@@ -1,16 +1,94 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
-const SignInPage = () => {
+const SignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   // Smoothly flips the boolean state visibility flag back and forth
   const toggleVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  /* Manual Google */
+  const onSubmit = async (event: React.SubmitEvent<HTMLElement>) => {
+    event.preventDefault();
+
+    const toastId = toast.loading(
+      "তথ্য যাচাই করা হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...",
+    );
+
+    //const toastId = toast.loading("Checking credentials, please wait...");
+
+    const formData = new FormData(event.target);
+
+    const userData = Object.fromEntries(formData.entries()) as {
+      email: string;
+      password: string;
+    };
+
+    const { data, error } = await authClient.signIn.email({
+      ...userData,
+      callbackURL: "/",
+    });
+
+    toast.dismiss(toastId);
+
+    if (data) {
+      console.log(data);
+      toast.success(
+        "স্বাগতম! আপনার সাইন-ইন সফল হয়েছে। হোম পেজে রিডাইরেক্ট করা হচ্ছে...",
+      );
+
+      // toast.success("Welcome! Sign-in successful. Redirecting...");
+    }
+
+    if (error) {
+      console.log(error);
+
+      let errorMessage = "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়। আবার চেষ্টা করুন।";
+
+      const errorCode =
+        "code" in error && typeof error.code === "string" ? error.code : "";
+
+      if (errorCode === "INVALID_EMAIL_OR_PASSWORD") {
+        errorMessage =
+          "আপনার দেওয়া ইমেইল অথবা পাসওয়ার্ডটি সঠিক নয়। অনুগ্রহ করে আবার যাচাই করুন।";
+      } else if (errorCode === "USER_NOT_FOUND") {
+        errorMessage = "এই ইমেইল দিয়ে কোনো অ্যাকাউন্ট খুঁজে পাওয়া যায়নি।";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      toast.error(errorMessage);
+
+      // toast.error(error.message || "Invalid email or password. Please try again.");
+    }
+  };
+
+  /* Automatic Google */
+  const handleGoogleSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+    });
+
+    // const data = await authClient.signIn.social({
+    //   provider: "google",
+    // });
+
+    // console.log(data)
+  };
+
+  /* Automatic Github */
+  const handleGithubSignIn = async () => {
+    await authClient.signIn.social({
+      provider: "github",
+    });
   };
 
   return (
@@ -61,7 +139,8 @@ const SignInPage = () => {
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
-                className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-neutral-200 bg-white text-sm font-semibold text-neutral-700 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-sm"
+                onClick={handleGoogleSignIn}
+                className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-neutral-200 bg-white text-sm font-semibold text-neutral-700 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-sm cursor-pointer"
               >
                 {/* Google */}
                 <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4">
@@ -88,7 +167,8 @@ const SignInPage = () => {
               {/* GitHub */}
               <button
                 type="button"
-                className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-neutral-200 bg-white text-sm font-semibold text-neutral-700 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-sm"
+                onClick={handleGithubSignIn}
+                className="flex h-11 items-center justify-center gap-2.5 rounded-xl border border-neutral-200 bg-white text-sm font-semibold text-neutral-700 transition-all duration-200 hover:border-neutral-300 hover:bg-neutral-50 hover:shadow-sm cursor-pointer"
               >
                 <svg
                   className="w-4 h-4 text-muted fill-current transition-colors duration-300 group-hover:text-primary"
@@ -110,7 +190,7 @@ const SignInPage = () => {
               <div className="h-px flex-1 bg-neutral-200" />
             </div>
 
-            <form className="space-y-5">
+            <form onSubmit={onSubmit} className="space-y-5">
               {/* Email */}
               <div className="form-group">
                 <label htmlFor="email" className="form-label">
@@ -227,7 +307,64 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default SignInForm;
+
+/* const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (isSubmitting) return;
+
+    const formData = new FormData(event.currentTarget);
+
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    if (typeof email !== "string" || typeof password !== "string") {
+      toast.error("Please enter your email and password.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const toastId = toast.loading("Signing you in...");
+
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: "/",
+      });
+
+      if (error) {
+        toast.error(error.message || "Unable to sign in.", {
+          id: toastId,
+          icon: <XCircle className="size-5" />,
+        });
+
+        return;
+      }
+
+      toast.success("Welcome back! Redirecting...", {
+        id: toastId,
+        icon: <CheckCircle2 className="size-5" />,
+      });
+
+      console.log(data);
+
+      // Better Auth handles the callback redirect.
+    } catch (error) {
+      console.error("Sign in failed:", error);
+
+      toast.error("Something went wrong. Please try again.", {
+        id: toastId,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+*/
 
 /* <div className="mb-8 text-center">
       <Link

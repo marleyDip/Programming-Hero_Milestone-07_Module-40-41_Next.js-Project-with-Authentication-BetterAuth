@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "ichef.bbci.co.uk",
       },
+
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+      },
+
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
     ],
   },
 };

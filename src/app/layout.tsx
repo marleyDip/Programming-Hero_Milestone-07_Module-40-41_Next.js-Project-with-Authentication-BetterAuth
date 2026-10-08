@@ -7,6 +7,7 @@ import { Noto_Serif_Bengali } from "next/font/google";
 
 import Marquee from "@/components/Marquee";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 const notoSerifBengali = Noto_Serif_Bengali({
@@ -148,6 +149,44 @@ export default function RootLayout({
         <main className="max-w-7xl mx-auto">{children}</main>
 
         <Footer />
+
+        <Toaster
+          position="bottom-right"
+          reverseOrder={false}
+          gutter={12}
+          toastOptions={{
+            duration: 3500,
+
+            style: {
+              background: "#171717",
+              color: "#fff",
+              border: "1px solid #2a2a2a",
+              borderRadius: "14px",
+              padding: "14px 16px",
+              fontSize: "14px",
+              fontWeight: "500",
+              boxShadow: "0 18px 45px rgba(0, 0, 0, 0.18)",
+            },
+
+            success: {
+              duration: 3000,
+
+              iconTheme: {
+                primary: "#22c55e",
+                secondary: "#fff",
+              },
+            },
+
+            error: {
+              duration: 4000,
+
+              iconTheme: {
+                primary: "#ef4444",
+                secondary: "#fff",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );
