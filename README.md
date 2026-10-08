@@ -6,14 +6,30 @@ A modern, responsive, and authentication-enabled Bengali newspaper platform buil
 
 **Bangla News 24** focuses on delivering Bengali news through a clean editorial interface while providing a complete authentication and account-management experience.
 
-<p align="center">
+[![Live Demo](https://img.shields.io/badge/Live_Demo-bangla--brief.vercel.app-c40004?style=for-the-badge&logo=vercel&logoColor=white)](https://bangla-brief.vercel.app)
+
+![Next.js](https://img.shields.io/badge/Next.js-16.3-000000?style=flat-square&logo=nextdotjs)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Better Auth](https://img.shields.io/badge/Better_Auth-1.7-7C3AED?style=flat-square)
+![MongoDB](https://img.shields.io/badge/MongoDB-7-47A248?style=flat-square&logo=mongodb&logoColor=white)
+
+<!-- <p align="center">
   <a href="https://bangla-brief.vercel.app/">
     <img src="https://img.shields.io/badge/Live%20Demo-Bangla%20Brief-DC2626?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Demo" />
   </a>
   <a href="https://github.com/marleyDip/Programming-Hero_Milestone-07_Module-40-41_Next.js-Project-with-Authentication-BetterAuth_Newspaper">
     <img src="https://img.shields.io/badge/GitHub-Repository-18181B?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Repository" />
   </a>
-</p>
+</p> -->
+
+<!--
+  Add screenshots here once you have them, for example:
+
+  ![Home page](./public/screenshots/home.png)
+  ![Article page](./public/screenshots/article.png)
+-->
 
 ---
 
@@ -27,15 +43,21 @@ A modern, responsive, and authentication-enabled Bengali newspaper platform buil
 - [Account Management](#-account-management)
 - [Tech Stack](#-tech-stack)
 - [Project Architecture](#-project-architecture)
-- [Getting Started](#-getting-started)
-- [Environment Variables](#-environment-variables)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+  - [Run the App](#run-the-app)
 - [Available Scripts](#-available-scripts)
+- [Architecture Notes](#architecture-notes)
 - [Authentication Flow](#-authentication-flow)
 - [Design & UX](#-design--ux)
 - [Performance & UX Considerations](#-performance--ux-considerations)
 - [What I Learned](#-what-i-learned)
+- [Deployment](#deployment)
 - [Future Improvements](#-future-improvements)
 - [Project Structure](#-project-structure)
+- [Data Source and Credits](#data-source-and-credits)
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Author](#-author)
@@ -44,7 +66,9 @@ A modern, responsive, and authentication-enabled Bengali newspaper platform buil
 
 ## 🚀 Overview
 
-**Bangla News 24** is a full-stack Bengali news web application developed as part of my **Programming Hero Milestone 07 — Next.js Project with Authentication** learning journey.
+**Bangla News 24** is a Bangla-language news website that brings Bangladesh and world news together in one place. It is designed like a modern digital front page: a lead story, top stories, curated sections, a live headline ticker and a most-read list, all in a clean, responsive interface.
+
+This bengali news web application developed as part of my **Programming Hero Milestone 07 - Next.js Project with Authentication** learning journey.
 
 The project combines a newspaper-style editorial interface with a modern authentication system powered by **Better Auth**.
 
@@ -107,6 +131,15 @@ The project is designed with a strong focus on **clean architecture, reusable co
 - Dynamic news details
 - Loading states
 - Error and empty-state handling
+
+**Reading experience**
+
+- Front page with a lead story, top stories and curated sections (Bangladesh, India, World, Health, Video and more)
+- Live headline ticker ("সর্বশেষ") that pauses on hover and respects reduced-motion settings
+- "সর্বাধিক পঠিত" (most read) list, pinned beside the content on large screens
+- Category pages for politics, world, economy, health, sports, technology and video
+- Article pages with hero photo, byline, publish and update times, reading time, pull quotes, photo captions and credits, tags and share links
+- Bangla dates, times and numerals throughout, in Dhaka time
 
 ### 🔐 Authentication
 
@@ -346,109 +379,107 @@ src/
 
 Follow these steps to run the project locally.
 
-### 1. Clone the repository
+### Prerequisites
+
+- **Node.js** 20.9 or newer
+- **npm** (a `package-lock.json` is included)
+- A **MongoDB** database, either local or on [MongoDB Atlas](https://www.mongodb.com/atlas)
+
+### Installation
 
 ```bash
+# 1. Clone the repository
 git clone https://github.com/marleyDip/Programming-Hero_Milestone-07_Module-40-41_Next.js-Project-with-Authentication-BetterAuth_Newspaper.git
-```
 
-### 2. Navigate into the project
-
-```bash
+# 2. Move into the project folder
 cd Programming-Hero_Milestone-07_Module-40-41_Next.js-Project-with-Authentication-BetterAuth_Newspaper
-```
 
-### 3. Install dependencies
-
-Using npm:
-
-```bash
+# 3. Install dependencies
 npm install
 ```
 
-### 4. Configure environment variables
+### 🔑 Environment Variables
 
-Create a `.env.local` file:
+Create a `.env.local` file in the project root:
 
 ```env
-MONGODB_URL=your_mongodb_connection_string
-BETTER_AUTH_SECRET=your_secure_secret
+# Site
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Better Auth
+BETTER_AUTH_SECRET=replace-with-a-long-random-string
 BETTER_AUTH_URL=http://localhost:3000
+
+# MongoDB
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<database>
+
+# Social login (optional)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
 ```
 
-Add any additional API-related environment variables required by your local configuration.
+| Variable | Description |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Public URL of the site, used for canonical links, Open Graph and structured data |
+| `BETTER_AUTH_SECRET` | Secret used to sign sessions. Generate one with `openssl rand -base64 32` |
+| `BETTER_AUTH_URL` | Base URL of the app (use your production URL when deploying) |
+| `MONGODB_URI` | MongoDB connection string |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | OAuth credentials from the [Google Cloud Console](https://console.cloud.google.com/) |
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | OAuth credentials from your GitHub account's [developer settings](https://github.com/settings/developers) |
 
-### 5. Start the development server
+> **Note:** Keep `.env.local` out of version control. It is already ignored by `.gitignore`. Make sure the variable names match the ones used in your Better Auth configuration.
+
+For social login, register these callback URLs with each provider (adjust the domain for production):
+
+```text
+http://localhost:3000/api/auth/callback/google
+http://localhost:3000/api/auth/callback/github
+```
+
+### Run the App
 
 ```bash
 npm run dev
 ```
 
-### 6. Open the application
-
-```text
-http://localhost:3000
-```
-
----
-
-## 🔑 Environment Variables
-
-Create `.env.local` in the project root.
-
-```env
-MONGODB_URL=
-
-BETTER_AUTH_SECRET=
-
-BETTER_AUTH_URL=http://localhost:3000
-```
-
-### Production
-
-For production deployment, update:
-
-```env
-BETTER_AUTH_URL=https://your-domain.com
-```
-
-> Keep `.env.local` private and never commit secrets to GitHub.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
 ## 📜 Available Scripts
 
-### Development
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create an optimized production build |
+| `npm run start` | Serve the production build |
+| `npm run lint` | Run ESLint |
 
-```bash
-npm run dev
-```
+---
 
-Starts the Next.js development server.
+## Routes
 
-### Production Build
+| Route | Description |
+| --- | --- |
+| `/` | Home page with the lead story, sections and most-read list |
+| `/category/[categoryId]` | News for a single category |
+| `/news/[newsId]` | Full article page |
+| `/signin` | Sign in |
+| `/signup` | Sign up |
+| `/about`, `/contact`, `/advertise`, `/privacy`, `/terms` | Site information pages linked from the footer |
 
-```bash
-npm run build
-```
+---
 
-Creates an optimized production build.
+## Architecture Notes
 
-### Production Server
-
-```bash
-npm run start
-```
-
-Starts the production Next.js server.
-
-### Lint
-
-```bash
-npm run lint
-```
-
-Runs ESLint against the project.
+- **Server Components first.** Pages fetch their data on the server, so the browser receives ready-to-read HTML and very little JavaScript.
+- **Cached data layer.** All API calls live in `src/lib/api.ts` and use Next.js caching (`use cache` with `cacheLife` and `cacheTag`). Failures are never cached, and the header and footer degrade gracefully if the API is unavailable.
+- **One source of truth.** Site name, tagline and URL come from a single config, so metadata, structured data and the footer always agree.
+- **Dhaka time everywhere.** Date helpers format Bangla dates and times in the `Asia/Dhaka` time zone, so readers see the same day as the server.
+- **Design tokens in CSS.** Brand colors, shadows and reusable utilities (buttons, focus ring, nav link) are defined once in `globals.css` with Tailwind v4.
+- **Accessibility and motion.** Animations are opt-in through `prefers-reduced-motion`, and interactive elements keep a visible focus ring.
 
 ---
 
@@ -611,6 +642,7 @@ This project helped strengthen my understanding of modern Next.js application de
 
 - Better Auth
 - Authentication sessions
+- Social Authentication (Google, Github)
 - User management
 - Sign in / sign up flows
 - Protected user experiences
@@ -645,12 +677,24 @@ This project helped strengthen my understanding of modern Next.js application de
 
 ---
 
+## Deployment
+
+The easiest way to deploy is [Vercel](https://vercel.com/):
+
+1. Push the repository to GitHub.
+2. Import the project on Vercel.
+3. Add every variable from [Environment Variables](#environment-variables) in **Project Settings → Environment Variables**, using your production URL for `NEXT_PUBLIC_SITE_URL` and `BETTER_AUTH_URL`.
+4. Update the OAuth callback URLs at Google and GitHub to use your production domain.
+5. Deploy.
+
+If you use MongoDB Atlas, allow your hosting provider's IP addresses in **Network Access**.
+
+---
+
 ## 🔮 Future Improvements
 
 Planned improvements may include:
 
-- [ ] Google authentication
-- [ ] GitHub authentication
 - [ ] Email verification
 - [ ] Forgot/reset password flow
 - [ ] User preferences
@@ -662,6 +706,14 @@ Planned improvements may include:
 - [ ] Improved accessibility auditing
 - [ ] Expanded user dashboard
 - [ ] More personalized news recommendations
+
+---
+
+## Data Source and Credits
+
+News content is loaded from a third-party API at `news-api-v2.vercel.app`. The articles it returns originate from **BBC Bangla** and carry their own photo credits (for example Getty Images and Reuters). Every article page links back to the original report.
+
+**Disclaimer:** This is an educational and portfolio project. All article text, photographs and trademarks belong to their respective owners, and they are shown here for demonstration purposes only. If you are a rights holder and would like content removed, please open an issue.
 
 ---
 
